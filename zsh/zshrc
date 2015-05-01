@@ -1,0 +1,29 @@
+# Path to zsh config folder
+export ZSH=$HOME/.zsh
+# export POWERLINE_CONFIG_PATHS=$HOME/.config:$HOME/.config/powerline
+export KEYTIMEOUT=1
+source /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+
+# Source my dotfiles (in explicit order, though my current config doesn't
+# really require explicit ordering)
+typeset -a DOTFILES
+DOTFILES=(
+    colors
+    exports
+    aliases
+    functions
+    directories
+    ssh
+    git
+    python
+    history
+    key-bindings
+    platform
+    ruby
+    go
+    options
+)
+for file in $DOTFILES; do
+    file=$ZSH/includes/$file
+    [[ -f $file ]] && source $file
+done

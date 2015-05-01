@@ -1,0 +1,103 @@
+set rtp+=~/.vim/bundle/Vundle.vim
+" Trying Vundle
+call vundle#begin()
+Plugin 'Valloric/YouCompleteMe'
+call vundle#end()
+" https://github.com/junegunn/vim-plug
+call plug#begin('~/.vim/plugged')
+Plug 'git@github.com:kien/rainbow_parentheses.vim.git'
+Plug 'git@github.com:scrooloose/syntastic.git'
+Plug 'git@github.com:Lokaltog/vim-easymotion.git'
+Plug 'git@github.com:junegunn/seoul256.vim'
+Plug 'git@github.com:wookiehangover/jshint.vim.git'
+Plug 'git@github.com:Shougo/vimshell.vim.git'
+Plug 'git@github.com:Shougo/vimproc.vim.git'
+call plug#end()
+"
+execute pathogen#infect()
+execute pathogen#helptags()
+source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
+syntax on
+set nocompatible
+set tabstop=4
+set expandtab
+set softtabstop=4
+set shiftwidth=4
+set bs=2
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set laststatus=2
+set background=dark
+set number
+set clipboard=unnamed
+set shell=/bin/sh
+set title
+" jk remap to esc sequence
+inoremap jk <esc>
+filetype indent plugin on
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'solarized'
+" python specific
+let g:pydiction_location = '/Users/bivers/.vim/bundle/pydiction/complete-dict'
+let g:pymode_folding = 0
+let g:pymode_indent = 1
+let g:pymode_lint = 1
+let g:pymode_lint_on_fly = 0
+let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
+let g:pymode_rope_completion = 1
+" 
+colorscheme solarized
+" colorscheme base16-solarized
+let g:powerline_pycmd='py'
+let g:powerline_pyeval='pyeval'
+let g:powerline_colorscheme='solarizedDarkLC'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+let g:vim_markdown_folding_disabled=1
+" disable Ex mode
+nnoremap Q <nop>
+" go customizations
+let g:go_fmt_fail_silently = 1
+let g:go_fmt_command = "gofmt"
+" disabled due to weird characters on screen
+let g:go_auto_type_info = 0
+" F key mappings
+nmap <F1> :GoDescribe<CR>
+nmap <F2> :Dash<CR>
+nmap <F3> :NERDTreeToggle<CR>
+nnoremap <F4> :GundoToggle<CR>
+nmap <F5> :TagbarToggle<CR>
+nnoremap <F10> :set spell spelllang=en_us<CR>
+nnoremap <F11> :set paste!<CR>
+nnoremap <F12> :set relativenumber!<CR>
+" Specific file types
+augroup filetypedetect_go
+    let g:go_highlight_functions = 1
+    let g:go_highlight_operators = 1
+    let g:go_highlight_methods = 1
+    let g:go_highlight_structs = 1
+    let g:godef_same_file_in_same_window=1
+    let g:go_highlight_extra_types = 1
+    let g:go_highlight_build_constraints = 1
+    autocmd FileType go nmap gd <Plug>(go-def)
+    autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
+    autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
+    autocmd FileType go nmap <Leader>t <Plug>(go-def-tab)
+
+    autocmd FileType go nmap <Leader>i <Plug>(go-info)
+
+    autocmd FileType go nmap <leader>r <Plug>(go-run)
+    autocmd FileType go nmap <leader>b <Plug>(go-build)
+    let g:go_bin_path = "/Users/bivers/Development/go/bin"
+augroup END
+" MacVim specific
+set guifont=Essential\PragmataPro:h14
+" syntastic specific
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+" experimental mouse :p
+set mouse=a
+set ttymouse=xterm2

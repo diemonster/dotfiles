@@ -1,0 +1,27 @@
+[user]
+	name = Ivers, Brandon (Seattle)
+	email = bivers@us.imshealth.com
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    ui = auto
+[alias]
+    ci = commit -a
+    st = status
+    co = checkout
+    ba = branch -a
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+[push]
+    default = matching
+[core]
+	excludesfile = /Users/bivers/.gitexcludes
+    editor = vim
+[merge]
+    tool = vimdiff
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

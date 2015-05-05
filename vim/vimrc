@@ -1,3 +1,7 @@
+"
+" Very little of this will work outside of a Mac
+"
+let s:darwin = has('mac')
 set rtp+=~/.vim/bundle/Vundle.vim
 " Trying Vundle
 call vundle#begin()
@@ -12,11 +16,34 @@ Plug 'git@github.com:junegunn/seoul256.vim'
 Plug 'git@github.com:wookiehangover/jshint.vim.git'
 Plug 'git@github.com:Shougo/vimshell.vim.git'
 Plug 'git@github.com:Shougo/vimproc.vim.git'
+Plug 'https://github.com/jnurmine/Zenburn.git'
+Plug 'https://github.com/ConradIrwin/vim-bracketed-paste.git'
+Plug 'junegunn/fzf',        { 'do': 'yes \| ./install' }
+Plug 'junegunn/vim-emoji'
+Plug 'airblade/vim-gitgutter'
+Plug 'saltstack/salt-vim'
+Plug 'dgryski/vim-godef'
+Plug 'sjl/gundo.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'majutsushi/tagbar'
+Plug 'pangloss/vim-javascript'
+Plug 'plasticboy/vim-markdown'
+Plug 'marijnh/tern_for_vim'
+Plug 'tpope/vim-fugitive'
+Plug 'markcornick/vim-vagrant'
+Plug 'rizzatti/dash.vim'
+Plug 'tomasr/molokai'
+Plug 'klen/python-mode'
+Plug 'ekalinin/Dockerfile.vim'
+if s:darwin
+  Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
+endif
 call plug#end()
-"
+" Start Powerline
+source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
+" 
 execute pathogen#infect()
 execute pathogen#helptags()
-source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
 syntax on
 set nocompatible
 set tabstop=4
@@ -46,14 +73,9 @@ let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
 let g:pymode_rope_completion = 1
 " 
 colorscheme solarized
-" colorscheme base16-solarized
 let g:powerline_pycmd='py'
 let g:powerline_pyeval='pyeval'
 let g:powerline_colorscheme='solarizedDarkLC'
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
 let g:vim_markdown_folding_disabled=1
 " disable Ex mode
 nnoremap Q <nop>
@@ -71,7 +93,33 @@ nmap <F5> :TagbarToggle<CR>
 nnoremap <F10> :set spell spelllang=en_us<CR>
 nnoremap <F11> :set paste!<CR>
 nnoremap <F12> :set relativenumber!<CR>
-" Specific file types
+" ----------------------------------------------------------------------------
+" <F8> | Color scheme selector
+" ----------------------------------------------------------------------------
+function! s:rotate_colors()
+  if !exists('s:colors_list')
+    let s:colors_list =
+    \ sort(map(
+    \   filter(split(globpath(&rtp, "colors/*.vim"), "\n"), 'v:val !~ "^/usr/"'),
+    \   "substitute(fnamemodify(v:val, ':t'), '\\..\\{-}$', '', '')"))
+  endif
+  if !exists('s:colors_index')
+    let s:colors_index = index(s:colors_list, g:colors_name)
+  endif
+  let s:colors_index = (s:colors_index + 1) % len(s:colors_list)
+  let name = s:colors_list[s:colors_index]
+  execute 'colorscheme' name
+  redraw
+  echo name
+endfunction
+nnoremap <F8> :call <SID>rotate_colors()<cr>
+
+" seoul theme customization
+let g:seoul256_background = 236
+
+" ----------------------------------------------------------------------------
+" golang autodetect config
+" ----------------------------------------------------------------------------
 augroup filetypedetect_go
     let g:go_highlight_functions = 1
     let g:go_highlight_operators = 1
@@ -91,13 +139,32 @@ augroup filetypedetect_go
     autocmd FileType go nmap <leader>b <Plug>(go-build)
     let g:go_bin_path = "/Users/bivers/Development/go/bin"
 augroup END
-" MacVim specific
+" ----------------------------------------------------------------------------
+" Macvim Specific
+" ----------------------------------------------------------------------------
 set guifont=Essential\PragmataPro:h14
-" syntastic specific
+" ----------------------------------------------------------------------------
+" syntastic config
+" ----------------------------------------------------------------------------
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-" experimental mouse :p
+" ----------------------------------------------------------------------------
+" experimental mouse mode ;)
+" ----------------------------------------------------------------------------
 set mouse=a
 set ttymouse=xterm2
+
+" ----------------------------------------------------------------------------
+" vim-fugitive
+" ----------------------------------------------------------------------------
+nmap     <Leader>g :Gstatus<CR>gg<c-n>
+noremap <Leader>d :Gdiff<CR>
+" Git Gutter emojis
+silent! if emoji#available()
+  let g:gitgutter_sign_added = emoji#for('small_blue_diamond')
+  let g:gitgutter_sign_modified = emoji#for('small_orange_diamond')
+  let g:gitgutter_sign_removed = emoji#for('small_red_triangle')
+  let g:gitgutter_sign_modified_removed = emoji#for('collision')
+endif

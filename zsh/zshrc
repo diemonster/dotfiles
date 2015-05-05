@@ -27,3 +27,6 @@ for file in $DOTFILES; do
     file=$ZSH/includes/$file
     [[ -f $file ]] && source $file
 done
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# z.sh
+. /usr/local/etc/profile.d/z.sh

@@ -9,7 +9,7 @@ Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.vim/plugged')
-Plug 'bling/vim-airline'
+" Plug 'bling/vim-airline'
 Plug 'git@github.com:kien/rainbow_parentheses.vim.git'
 Plug 'git@github.com:scrooloose/syntastic.git'
 Plug 'git@github.com:Lokaltog/vim-easymotion.git'
@@ -43,11 +43,12 @@ if s:darwin
 endif
 call plug#end()
 " Start Powerline
-" source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
+source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
 " 
 execute pathogen#infect()
 execute pathogen#helptags()
 syntax on
+set encoding=utf-8
 set nocompatible
 set tabstop=4
 set expandtab
@@ -61,11 +62,10 @@ set number
 set clipboard=unnamed
 set shell=/bin/sh
 set title
+set completeopt-=preview
 " jk remap to esc sequence
 inoremap jk <esc>
 filetype indent plugin on
-let g:airline_powerline_fonts = 1
-let g:airline_theme = 'solarized'
 " python specific
 let g:pydiction_location = '/Users/bivers/.vim/bundle/pydiction/complete-dict'
 let g:pymode_folding = 0
@@ -146,12 +146,16 @@ augroup END
 " Macvim Specific
 " ----------------------------------------------------------------------------
 set guifont=Essential\PragmataPro:h14
+if has("gui_macvim")
+    let g:fzf_launcher = "iterm2-launcher %s"
+endif
 " ----------------------------------------------------------------------------
 " syntastic config
 " ----------------------------------------------------------------------------
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
+let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
 " ----------------------------------------------------------------------------
 " experimental mouse mode ;)
@@ -176,6 +180,8 @@ endif
 " Airline Config
 " ----------------------------------------------------------------------------
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+" let g:airline_theme = 'solarized'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
@@ -224,3 +230,36 @@ command! FZFLines call fzf#run({
 \   'options': '--extended --nth=3..',
 \   'down':    '60%'
 \})
+
+" ----------------------------------------------------------------------------
+" Locate
+" ----------------------------------------------------------------------------
+command! -nargs=1 Locate call fzf#run(
+      \ {'source': 'locate <q-args>', 'sink': 'e', 'options': '-m'})
+
+command! FZFTag if !empty(tagfiles()) | call fzf#run({
+\   'source': "sed '/^\\!/d;s/\t.*//' " . join(tagfiles()) . ' | uniq',
+\   'sink':   'tag',
+\ }) | else | echo 'No tags' | endif
+" ----------------------------------------------------------------------------
+" ag search
+" ----------------------------------------------------------------------------
+command! -nargs=1 Ag call fzf#run({
+            \'source': Arghandler(<f-args>),
+            \'sink' : function('AgHandler'),
+            \'options' : '-m'
+            \})
+
+function! AgHandler(l)
+    let keys = split(a:l,':')
+    execute 'tabe +' . keys[-2] . ' ' . escape(keys[-1], ' ')
+endfunction 
+
+function! Arghandler(l)
+    return "ag -i " . a:l . " | sed 's@\\(.[^:]*\\):\\(.[^:]*\\):\\(.*\\)@\\3:\\2:\\1@' "
+endfunction
+" ----------------------------------------------------------------------------
+" YouCompleteMe
+" ----------------------------------------------------------------------------
+let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_add_preview_to_completeopt = 0

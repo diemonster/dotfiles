@@ -30,3 +30,5 @@ alias sl='ls -h --color=always' # In case of screw-ups
 # Sometimes I work on vi-only systems -- this keeps me sane on the switch
 alias vi="vim"
 
+# alias for fzf 
+alias fzf-grep='grep --line-buffered --color=never -r "" * | fzf'

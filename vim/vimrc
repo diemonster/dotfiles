@@ -9,15 +9,12 @@ Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.vim/plugged')
-" Plug 'bling/vim-airline'
+Plug 'bling/vim-airline'
 Plug 'git@github.com:kien/rainbow_parentheses.vim.git'
 Plug 'git@github.com:scrooloose/syntastic.git'
 Plug 'git@github.com:Lokaltog/vim-easymotion.git'
 Plug 'git@github.com:junegunn/seoul256.vim'
 Plug 'git@github.com:wookiehangover/jshint.vim.git'
-Plug 'git@github.com:Shougo/vimshell.vim.git'
-Plug 'git@github.com:Shougo/vimproc.vim.git'
-Plug 'https://github.com/jnurmine/Zenburn.git'
 Plug 'https://github.com/ConradIrwin/vim-bracketed-paste.git'
 Plug 'junegunn/fzf',        { 'do': 'yes \| ./install' }
 Plug 'junegunn/vim-emoji'
@@ -38,12 +35,13 @@ Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'klen/python-mode'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
+Plug 'edkolev/tmuxline.vim'
 if s:darwin
   Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
 endif
 call plug#end()
 " Start Powerline
-source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
+" source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
 " 
 execute pathogen#infect()
 execute pathogen#helptags()
@@ -62,6 +60,10 @@ set number
 set clipboard=unnamed
 set shell=/bin/sh
 set title
+" syntastic settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 set completeopt-=preview
 " jk remap to esc sequence
 inoremap jk <esc>
@@ -93,8 +95,7 @@ nmap <F2> :Dash<CR>
 nmap <F3> :NERDTreeToggle<CR>
 nnoremap <F4> :GundoToggle<CR>
 nmap <F5> :TagbarToggle<CR>
-nnoremap <F10> :set spell spelllang=en_us<CR>
-nnoremap <F11> :set paste!<CR>
+nnoremap <F11> :set spell spelllang=en_us<CR>
 nnoremap <F12> :set relativenumber!<CR>
 " ----------------------------------------------------------------------------
 " <F8> | Color scheme selector
@@ -131,16 +132,14 @@ augroup filetypedetect_go
     let g:godef_same_file_in_same_window=1
     let g:go_highlight_extra_types = 1
     let g:go_highlight_build_constraints = 1
+    let g:go_bin_path = "/Users/bivers/Development/go/bin"
     autocmd FileType go nmap gd <Plug>(go-def)
-    autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
-    autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
-    autocmd FileType go nmap <Leader>t <Plug>(go-def-tab)
+    autocmd FileType go nmap <Leader>t <Plug>(go-test)
 
     autocmd FileType go nmap <Leader>i <Plug>(go-info)
 
     autocmd FileType go nmap <leader>r <Plug>(go-run)
     autocmd FileType go nmap <leader>b <Plug>(go-build)
-    let g:go_bin_path = "/Users/bivers/Development/go/bin"
 augroup END
 " ----------------------------------------------------------------------------
 " Macvim Specific
@@ -157,25 +156,27 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
+let g:syntastic_error_symbol = emoji#for('poop')
+let g:syntastic_warning_symbol = emoji#for('sob')
 " ----------------------------------------------------------------------------
 " experimental mouse mode ;)
 " ----------------------------------------------------------------------------
 set mouse=a
 set ttymouse=xterm2
-
 " ----------------------------------------------------------------------------
 " vim-fugitive
 " ----------------------------------------------------------------------------
 nmap     <Leader>g :Gstatus<CR>gg<c-n>
 noremap <Leader>d :Gdiff<CR>
+" ----------------------------------------------------------------------------
 " Git Gutter emojis
+" ----------------------------------------------------------------------------
 silent! if emoji#available()
   let g:gitgutter_sign_added = emoji#for('small_blue_diamond')
   let g:gitgutter_sign_modified = emoji#for('small_orange_diamond')
   let g:gitgutter_sign_removed = emoji#for('small_red_triangle')
   let g:gitgutter_sign_modified_removed = emoji#for('collision')
 endif
-
 " ----------------------------------------------------------------------------
 " Airline Config
 " ----------------------------------------------------------------------------
@@ -263,3 +264,4 @@ endfunction
 " ----------------------------------------------------------------------------
 let g:ycm_autoclose_preview_window_after_completion = 0
 let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'

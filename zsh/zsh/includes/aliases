@@ -1,7 +1,6 @@
 # Aliases
 
 # Sudo
-alias svim='sudo vim'
 alias stail="sudo tail"
 alias irssi='TERM=screen-256color irssi'
 
@@ -27,8 +26,9 @@ alias l='ls -la --color=always'
 alias ll='ls -l --color=always'
 alias sl='ls -h --color=always' # In case of screw-ups
 
-# Sometimes I work on vi-only systems -- this keeps me sane on the switch
-alias vi="vim"
+# Using neovim until it breaks stuff
+alias vi="nvim"
+alias vim="nvim"
 
 # alias for fzf 
-alias fzf-grep='grep --line-buffered --color=never -r "" * | fzf'
+alias fzf-ad='ag --nobreak --nonumbers --noheading . | fzf'

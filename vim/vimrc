@@ -35,7 +35,7 @@ Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'klen/python-mode'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
-Plug 'edkolev/tmuxline.vim'
+" Plug 'edkolev/tmuxline.vim'
 if s:darwin
   Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
 endif
@@ -97,6 +97,9 @@ nnoremap <F4> :GundoToggle<CR>
 nmap <F5> :TagbarToggle<CR>
 nnoremap <F11> :set spell spelllang=en_us<CR>
 nnoremap <F12> :set relativenumber!<CR>
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --inline-info'
+endif
 " ----------------------------------------------------------------------------
 " <F8> | Color scheme selector
 " ----------------------------------------------------------------------------
@@ -162,7 +165,9 @@ let g:syntastic_warning_symbol = emoji#for('sob')
 " experimental mouse mode ;)
 " ----------------------------------------------------------------------------
 set mouse=a
-set ttymouse=xterm2
+if has ("gui_macvim")
+    set ttymouse=xterm2
+endif
 " ----------------------------------------------------------------------------
 " vim-fugitive
 " ----------------------------------------------------------------------------
@@ -242,6 +247,7 @@ command! FZFTag if !empty(tagfiles()) | call fzf#run({
 \   'source': "sed '/^\\!/d;s/\t.*//' " . join(tagfiles()) . ' | uniq',
 \   'sink':   'tag',
 \ }) | else | echo 'No tags' | endif
+
 " ----------------------------------------------------------------------------
 " ag search
 " ----------------------------------------------------------------------------

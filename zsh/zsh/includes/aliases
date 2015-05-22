@@ -25,10 +25,7 @@ alias lsa='ls -lah --color=always'
 alias l='ls -la --color=always'
 alias ll='ls -l --color=always'
 alias sl='ls -h --color=always' # In case of screw-ups
-
-# Using neovim until it breaks stuff
-alias vi="nvim"
-alias vim="nvim"
+alias cat='ccat'
 
 # alias for fzf 
 alias fzf-ad='ag --nobreak --nonumbers --noheading . | fzf'

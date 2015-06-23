@@ -10,6 +10,8 @@ call vundle#end()
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.vim/plugged')
 Plug 'bling/vim-airline'
+Plug 'fatih/vim-go'
+Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'git@github.com:kien/rainbow_parentheses.vim.git'
 Plug 'git@github.com:scrooloose/syntastic.git'
 Plug 'git@github.com:Lokaltog/vim-easymotion.git'
@@ -29,12 +31,13 @@ Plug 'plasticboy/vim-markdown'
 Plug 'marijnh/tern_for_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'markcornick/vim-vagrant'
-Plug 'rizzatti/dash.vim'
-Plug 'tomasr/molokai'
 Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'klen/python-mode'
 Plug 'ekalinin/Dockerfile.vim'
+Plug 'fatih/molokai'
+Plug 'morhetz/gruvbox'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
+Plug 'mhinz/vim-startify'
 " Plug 'edkolev/tmuxline.vim'
 if s:darwin
   Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
@@ -54,12 +57,16 @@ set softtabstop=4
 set shiftwidth=4
 set bs=2
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set wildmenu
 set laststatus=2
 set background=dark
 set number
 set clipboard=unnamed
 set shell=/bin/sh
 set title
+set lazyredraw
+set incsearch
+set showcmd
 " syntastic settings
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -91,7 +98,6 @@ let g:go_fmt_command = "gofmt"
 let g:go_auto_type_info = 0
 " F key mappings
 nmap <F1> :GoDescribe<CR>
-nmap <F2> :Dash<CR>
 nmap <F3> :NERDTreeToggle<CR>
 nnoremap <F4> :GundoToggle<CR>
 nmap <F5> :TagbarToggle<CR>
@@ -138,9 +144,9 @@ augroup filetypedetect_go
     let g:go_bin_path = "/Users/bivers/Development/go/bin"
     autocmd FileType go nmap gd <Plug>(go-def)
     autocmd FileType go nmap <Leader>t <Plug>(go-test)
-
-    autocmd FileType go nmap <Leader>i <Plug>(go-info)
-
+    
+    autocmd FileType go nmap <Leader>i <Plug>(go-install)
+    
     autocmd FileType go nmap <leader>r <Plug>(go-run)
     autocmd FileType go nmap <leader>b <Plug>(go-build)
 augroup END
@@ -212,30 +218,27 @@ nnoremap <silent> <Leader><Enter> :call fzf#run({
 \   'options': '+m',
 \   'down':    len(<sid>buflist()) + 2
 \ })<CR>
+
 " ----------------------------------------------------------------------------
-" Buffer search
+" Select buffer
 " ----------------------------------------------------------------------------
-function! s:line_handler(l)
-  let keys = split(a:l, ':\t')
-  exec 'buf ' . keys[0]
-  exec keys[1]
-  normal! ^zz
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
 endfunction
 
-function! s:buffer_lines()
-  let res = []
-  for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
-    call extend(res, map(getbufline(b,0,"$"), 'b . ":\t" . (v:key + 1) . ":\t" . v:val '))
-  endfor
-  return res
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
 
-command! FZFLines call fzf#run({
-\   'source':  <sid>buffer_lines(),
-\   'sink':    function('<sid>line_handler'),
-\   'options': '--extended --nth=3..',
-\   'down':    '60%'
-\})
+nnoremap <silent> <Leader><Enter> :call fzf#run({
+\   'source':  reverse(<sid>buflist()),
+\   'sink':    function('<sid>bufopen'),
+\   'options': '+m --prompt="Buf> "',
+\   'down':    len(<sid>buflist()) + 2
+\ })<CR>
 
 " ----------------------------------------------------------------------------
 " Locate
@@ -243,31 +246,70 @@ command! FZFLines call fzf#run({
 command! -nargs=1 Locate call fzf#run(
       \ {'source': 'locate <q-args>', 'sink': 'e', 'options': '-m'})
 
-command! FZFTag if !empty(tagfiles()) | call fzf#run({
+command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
 \   'source': "sed '/^\\!/d;s/\t.*//' " . join(tagfiles()) . ' | uniq',
 \   'sink':   'tag',
-\ }) | else | echo 'No tags' | endif
+\ }) | else | echo 'Preparing tags' | call system('ctags -R') | FZFTag | endif
 
 " ----------------------------------------------------------------------------
-" ag search
+" Ag
 " ----------------------------------------------------------------------------
-command! -nargs=1 Ag call fzf#run({
-            \'source': Arghandler(<f-args>),
-            \'sink' : function('AgHandler'),
-            \'options' : '-m'
-            \})
+function! s:ag_handler(lines)
+  if len(a:lines) < 2 | return | endif
 
-function! AgHandler(l)
-    let keys = split(a:l,':')
-    execute 'tabe +' . keys[-2] . ' ' . escape(keys[-1], ' ')
-endfunction 
-
-function! Arghandler(l)
-    return "ag -i " . a:l . " | sed 's@\\(.[^:]*\\):\\(.[^:]*\\):\\(.*\\)@\\3:\\2:\\1@' "
+  let [key, line] = a:lines[0:1]
+  let [file, line, col] = split(line, ':')[0:2]
+  let cmd = get({'ctrl-x': 'split', 'ctrl-v': 'vertical split', 'ctrl-t': 'tabe'}, key, 'e')
+  execute cmd escape(file, ' %#\')
+  execute line
+  execute 'normal!' col.'|zz'
 endfunction
+
+command! -nargs=1 Ag call fzf#run({
+\ 'source':  'ag --nogroup --column --color "'.escape(<q-args>, '"\').'"',
+\ 'sink*':    function('<sid>ag_handler'),
+\ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --no-multi --color hl:68,hl+:110',
+\ 'down':    '50%'
+\ })
+
+" ----------------------------------------------------------------------------
+" ack.vim
+" ----------------------------------------------------------------------------
+if executable('ag')
+  let &grepprg = 'ag --nogroup --nocolor --column'
+else
+  let &grepprg = 'grep -rn $* *'
+endif
+command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
 " ----------------------------------------------------------------------------
 " YouCompleteMe
 " ----------------------------------------------------------------------------
 let g:ycm_autoclose_preview_window_after_completion = 0
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
+" ----------------------------------------------------------------------------
+" Startify
+" ----------------------------------------------------------------------------
+let g:startify_list_order = ['bookmarks', 'files', 'sessions']
+let g:startify_bookmarks = [
+    \ '~/Development/go/src/gitlab.imshealth.com/xfra',
+    \ '~/Development/go/src/gitlab.imshealth.com/xfra/l0-cli',
+    \ '~/Development/go/src/gitlab.imshealth.com/xfra/layer0',
+    \ ]
+let g:startify_custom_header = [
+    \ '      ___                       ___           ___           ___           ___                    ___                       ___      ',
+    \ '     /\  \          ___        /\__\         /\  \         /\  \         /\  \                  /\__\          ___        /\__\     ',
+    \ '    /::\  \        /\  \      /:/  /        /::\  \       /::\  \       /::\  \                /:/  /         /\  \      /::|  |    ',
+    \ '   /:/\:\  \       \:\  \    /:/  /        /:/\:\  \     /:/\:\  \     /:/\ \  \              /:/  /          \:\  \    /:|:|  |    ',
+    \ '  /::\~\:\__\      /::\__\  /:/__/  ___   /::\~\:\  \   /::\~\:\  \   _\:\~\ \  \            /:/__/  ___      /::\__\  /:/|:|__|__  ', 
+    \ ' /:/\:\ \:|__|  __/:/\/__/  |:|  | /\__\ /:/\:\ \:\__\ /:/\:\ \:\__\ /\ \:\ \ \__\           |:|  | /\__\  __/:/\/__/ /:/ |::::\__\ ',
+    \ ' \:\~\:\/:/  / /\/:/  /     |:|  |/:/  / \:\~\:\ \/__/ \/_|::\/:/  / \:\ \:\ \/__/           |:|  |/:/  / /\/:/  /    \/__/~~/:/  / ',
+    \ '  \:\ \::/  /  \::/__/      |:|__/:/  /   \:\ \:\__\      |:|::/  /   \:\ \:\__\             |:|__/:/  /  \::/__/           /:/  /  ', 
+    \ '   \:\/:/  /    \:\__\       \::::/__/     \:\ \/__/      |:|\/__/     \:\/:/  /              \::::/__/    \:\__\          /:/  /   ', 
+    \ '    \::/__/      \/__/        ~~~~          \:\__\        |:|  |        \::/  /                ~~~~         \/__/         /:/  /    ', 
+    \ '     ~~                                      \/__/         \|__|         \/__/                                            \/__/     ', 
+    \ '',
+    \ ' ===================================================================================================================================',
+    \ '',
+    \ ]

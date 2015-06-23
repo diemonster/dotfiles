@@ -29,3 +29,6 @@ alias cat='ccat'
 
 # alias for fzf 
 alias fzf-ad='ag --nobreak --nonumbers --noheading . | fzf'
+
+# wtf
+alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'

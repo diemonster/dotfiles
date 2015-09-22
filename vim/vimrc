@@ -2,52 +2,41 @@
 " Very little of this will work outside of a Mac
 "
 let s:darwin = has('mac')
-set rtp+=~/.vim/bundle/Vundle.vim
-" Trying Vundle
-call vundle#begin()
-Plugin 'Valloric/YouCompleteMe'
-call vundle#end()
-" https://github.com/junegunn/vim-plug
 call plug#begin('~/.vim/plugged')
-Plug 'bling/vim-airline'
 Plug 'fatih/vim-go'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'git@github.com:kien/rainbow_parentheses.vim.git'
 Plug 'git@github.com:scrooloose/syntastic.git'
 Plug 'git@github.com:Lokaltog/vim-easymotion.git'
-Plug 'git@github.com:junegunn/seoul256.vim'
 Plug 'git@github.com:wookiehangover/jshint.vim.git'
 Plug 'https://github.com/ConradIrwin/vim-bracketed-paste.git'
 Plug 'junegunn/fzf',        { 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-emoji'
 Plug 'airblade/vim-gitgutter'
 Plug 'saltstack/salt-vim'
 Plug 'dgryski/vim-godef'
-Plug 'sjl/gundo.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'majutsushi/tagbar'
+" Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
 Plug 'plasticboy/vim-markdown'
 Plug 'marijnh/tern_for_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'markcornick/vim-vagrant'
-Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'klen/python-mode'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'fatih/molokai'
 Plug 'morhetz/gruvbox'
-Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 Plug 'mhinz/vim-startify'
-" Plug 'edkolev/tmuxline.vim'
+Plug 'Valloric/YouCompleteMe'
+Plug 'kristijanhusak/vim-hybrid-material'
+Plug 'mbbill/undotree'
 if s:darwin
   Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
+Plug 'bling/vim-airline'
 endif
 call plug#end()
-" Start Powerline
-" source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
-" 
-execute pathogen#infect()
-execute pathogen#helptags()
+
 syntax on
 set encoding=utf-8
 set nocompatible
@@ -67,11 +56,6 @@ set title
 set lazyredraw
 set incsearch
 set showcmd
-" syntastic settings
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-set completeopt-=preview
 " jk remap to esc sequence
 inoremap jk <esc>
 filetype indent plugin on
@@ -85,9 +69,6 @@ let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
 let g:pymode_rope_completion = 1
 " 
 colorscheme solarized
-let g:powerline_pycmd='py'
-let g:powerline_pyeval='pyeval'
-let g:powerline_colorscheme='solarizedDarkLC'
 let g:vim_markdown_folding_disabled=1
 " disable Ex mode
 nnoremap Q <nop>
@@ -99,13 +80,11 @@ let g:go_auto_type_info = 0
 " F key mappings
 nmap <F1> :GoDescribe<CR>
 nmap <F3> :NERDTreeToggle<CR>
-nnoremap <F4> :GundoToggle<CR>
+nnoremap <F4> :UndotreeToggle<CR>
 nmap <F5> :TagbarToggle<CR>
+nmap <F6> :UndotreeToggle<CR>
 nnoremap <F11> :set spell spelllang=en_us<CR>
 nnoremap <F12> :set relativenumber!<CR>
-if has('nvim')
-  let $FZF_DEFAULT_OPTS .= ' --inline-info'
-endif
 " ----------------------------------------------------------------------------
 " <F8> | Color scheme selector
 " ----------------------------------------------------------------------------
@@ -126,9 +105,6 @@ function! s:rotate_colors()
   echo name
 endfunction
 nnoremap <F8> :call <SID>rotate_colors()<cr>
-
-" seoul theme customization
-let g:seoul256_background = 236
 
 " ----------------------------------------------------------------------------
 " golang autodetect config
@@ -154,9 +130,6 @@ augroup END
 " Macvim Specific
 " ----------------------------------------------------------------------------
 set guifont=Essential\PragmataPro:h14
-if has("gui_macvim")
-    let g:fzf_launcher = "iterm2-launcher %s"
-endif
 " ----------------------------------------------------------------------------
 " syntastic config
 " ----------------------------------------------------------------------------
@@ -167,6 +140,10 @@ let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
 let g:syntastic_error_symbol = emoji#for('poop')
 let g:syntastic_warning_symbol = emoji#for('sob')
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+set completeopt-=preview
 " ----------------------------------------------------------------------------
 " experimental mouse mode ;)
 " ----------------------------------------------------------------------------
@@ -194,83 +171,28 @@ endif
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 " let g:airline_theme = 'solarized'
-let g:airline_powerline_fonts = 1
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#branch#enabled = 1
-" ----------------------------------------------------------------------------
-" Select buffer
-" ----------------------------------------------------------------------------
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
-nnoremap <silent> <Leader><Enter> :call fzf#run({
-\   'source':  reverse(<sid>buflist()),
-\   'sink':    function('<sid>bufopen'),
-\   'options': '+m',
-\   'down':    len(<sid>buflist()) + 2
-\ })<CR>
 
 " ----------------------------------------------------------------------------
-" Select buffer
+" FZF
 " ----------------------------------------------------------------------------
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --inline-info'
+endif
 
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
+nnoremap <silent> <Leader><Leader> :Files<CR>
+nnoremap <silent> <Leader>C        :Colors<CR>
+nnoremap <silent> <Leader><Enter>  :Buffers<CR>
+nnoremap <silent> q: :History:<CR>
+nnoremap <silent> q/ :History/<CR>
 
-nnoremap <silent> <Leader><Enter> :call fzf#run({
-\   'source':  reverse(<sid>buflist()),
-\   'sink':    function('<sid>bufopen'),
-\   'options': '+m --prompt="Buf> "',
-\   'down':    len(<sid>buflist()) + 2
-\ })<CR>
-
-" ----------------------------------------------------------------------------
-" Locate
-" ----------------------------------------------------------------------------
-command! -nargs=1 Locate call fzf#run(
-      \ {'source': 'locate <q-args>', 'sink': 'e', 'options': '-m'})
-
-command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
-\   'source': "sed '/^\\!/d;s/\t.*//' " . join(tagfiles()) . ' | uniq',
-\   'sink':   'tag',
-\ }) | else | echo 'Preparing tags' | call system('ctags -R') | FZFTag | endif
-
-" ----------------------------------------------------------------------------
-" Ag
-" ----------------------------------------------------------------------------
-function! s:ag_handler(lines)
-  if len(a:lines) < 2 | return | endif
-
-  let [key, line] = a:lines[0:1]
-  let [file, line, col] = split(line, ':')[0:2]
-  let cmd = get({'ctrl-x': 'split', 'ctrl-v': 'vertical split', 'ctrl-t': 'tabe'}, key, 'e')
-  execute cmd escape(file, ' %#\')
-  execute line
-  execute 'normal!' col.'|zz'
-endfunction
-
-command! -nargs=1 Ag call fzf#run({
-\ 'source':  'ag --nogroup --column --color "'.escape(<q-args>, '"\').'"',
-\ 'sink*':    function('<sid>ag_handler'),
-\ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --no-multi --color hl:68,hl+:110',
-\ 'down':    '50%'
-\ })
+inoremap <expr> <c-x><c-t> fzf#complete('tmuxwords.rb --all-but-current --scroll 500 --min 5')
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
 
 " ----------------------------------------------------------------------------
 " ack.vim

@@ -277,7 +277,7 @@ call <sid>hi("pythonOperator",  s:gui0E, "", s:cterm0E, "", "")
 call <sid>hi("pythonRepeat",    s:gui0E, "", s:cterm0E, "", "")
 
 " Golang highlighting
-call <sid>hi("golangOperator",  s:gui0E, "", s:cterm0E, "", "")
+call <sid>hi("goOperator",  s:gui0C, "", s:cterm0E, "", "")
 
 " Ruby highlighting
 call <sid>hi("rubyAttribute",               s:gui0D, "", s:cterm0D, "", "")

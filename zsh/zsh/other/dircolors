@@ -2,7 +2,7 @@
 
 NORMAL                 38;5;253    # Global default
 FILE                   38;5;253    # Normal file
-DIR                    38;5;30     # Directory
+DIR                    38;5;32     # Directory
 LINK                   38;5;57     # Symbolic link.  (can be set to 'target')
 EXEC                   38;5;166    # Executable
 FIFO                   38;5;178    # Pipe

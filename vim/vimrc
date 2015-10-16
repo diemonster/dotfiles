@@ -26,7 +26,6 @@ Plug 'markcornick/vim-vagrant'
 Plug 'klen/python-mode'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'fatih/molokai'
-Plug 'morhetz/gruvbox'
 Plug 'mhinz/vim-startify'
 Plug 'Valloric/YouCompleteMe'
 Plug 'kristijanhusak/vim-hybrid-material'
@@ -69,7 +68,6 @@ let g:pymode_lint_on_fly = 0
 let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
 let g:pymode_rope_completion = 1
 " 
-" colorscheme solarized
 colorscheme material-dark
 let g:vim_markdown_folding_disabled=1
 " disable Ex mode
@@ -130,10 +128,6 @@ augroup filetypedetect_go
     autocmd FileType go nmap <leader>b <Plug>(go-build)
 augroup END
 " ----------------------------------------------------------------------------
-" Macvim Specific
-" ----------------------------------------------------------------------------
-set guifont=Essential\PragmataPro:h14
-" ----------------------------------------------------------------------------
 " syntastic config
 " ----------------------------------------------------------------------------
 let g:syntastic_always_populate_loc_list = 1
@@ -173,7 +167,6 @@ endif
 " ----------------------------------------------------------------------------
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-" let g:airline_theme = 'solarized'
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#branch#enabled = 1

@@ -1,15 +1,14 @@
 " Base16 material-dark (https://github.com/chriskempson/base16)
-" Scheme: Sean Washington (http://seanwash.com)
 
 " This enables the coresponding base16-shell script to run so that
 " :colorscheme works in terminals supported by base16-shell scripts
 " User must set this variable in .vimrc
 "   let g:base16_shell_path=base16-builder/output/shell/
-if !has('gui_running')
-  if exists("g:base16_shell_path")
-    execute "silent !/bin/sh ".g:base16_shell_path."/base16-material-dark.".&background.".sh"
-  endif
-endif
+" if !has('gui_running')
+"   if exists("g:base16_shell_path")
+"     execute "silent !/bin/sh ".g:base16_shell_path."/base16-material-dark.".&background.".sh"
+"   endif
+" endif
 
 " GUI color definitions
 let s:gui00 = "263238"
@@ -277,7 +276,7 @@ call <sid>hi("pythonOperator",  s:gui0E, "", s:cterm0E, "", "")
 call <sid>hi("pythonRepeat",    s:gui0E, "", s:cterm0E, "", "")
 
 " Golang highlighting
-call <sid>hi("goOperator",  s:gui0C, "", s:cterm0E, "", "")
+call <sid>hi("goOperator",  s:gui0C, "", s:cterm0C, "", "")
 
 " Ruby highlighting
 call <sid>hi("rubyAttribute",               s:gui0D, "", s:cterm0D, "", "")

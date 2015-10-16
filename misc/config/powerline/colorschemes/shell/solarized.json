@@ -2,12 +2,12 @@
 	"name": "Solarized dark for shell",
 	"groups": {
 		"mode": { "fg": "solarized:base3", "bg": "solarized:blue", "attrs": ["bold"] },
-		"hostname": { "fg": "solarized:base3", "bg": "solarized:violet", "attrs": [] }
+		"hostname": { "fg": "solarized:base3", "bg": "solarized:magenta", "attrs": [] }
 	},
 	"mode_translations": {
 		"vicmd": {
 			"groups": {
-				"mode": { "fg": "solarized:base3", "bg": "solarized:violet", "attrs": ["bold"] }
+				"mode": { "fg": "solarized:base3", "bg": "solarized:blue", "attrs": [] }
 			}
 		}
 	}

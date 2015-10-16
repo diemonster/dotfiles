@@ -17,7 +17,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'saltstack/salt-vim'
 Plug 'dgryski/vim-godef'
 Plug 'scrooloose/nerdtree'
-" Plug 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
 Plug 'plasticboy/vim-markdown'
 Plug 'marijnh/tern_for_vim'
@@ -31,6 +31,7 @@ Plug 'mhinz/vim-startify'
 Plug 'Valloric/YouCompleteMe'
 Plug 'kristijanhusak/vim-hybrid-material'
 Plug 'mbbill/undotree'
+Plug 'tpope/vim-commentary'
 if s:darwin
   Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
 Plug 'bling/vim-airline'
@@ -68,13 +69,15 @@ let g:pymode_lint_on_fly = 0
 let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
 let g:pymode_rope_completion = 1
 " 
-colorscheme solarized
+" colorscheme solarized
+colorscheme material-dark
 let g:vim_markdown_folding_disabled=1
 " disable Ex mode
 nnoremap Q <nop>
 " go customizations
 let g:go_fmt_fail_silently = 1
 let g:go_fmt_command = "gofmt"
+let g:enable_bold_font = 1
 " disabled due to weird characters on screen
 let g:go_auto_type_info = 0
 " F key mappings

@@ -1,6 +1,5 @@
 # Path to zsh config folder
 export ZSH=$HOME/.zsh
-# export POWERLINE_CONFIG_PATHS=$HOME/.config:$HOME/.config/powerline
 export KEYTIMEOUT=1
 source /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
 
@@ -30,3 +29,5 @@ done
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # z.sh
 . /usr/local/etc/profile.d/z.sh
+
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh

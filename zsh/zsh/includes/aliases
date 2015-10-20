@@ -30,6 +30,9 @@ alias cat='ccat'
 # alias for fzf 
 alias fzf-ad='ag --nobreak --nonumbers --noheading . | fzf'
 
+# alias for silver searcher (ag)
+alias ag='ag --color-path "1;33"'
+
 # wtf
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 

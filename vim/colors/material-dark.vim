@@ -1,31 +1,37 @@
-" Base16 material-dark (https://github.com/chriskempson/base16)
-
-" This enables the coresponding base16-shell script to run so that
-" :colorscheme works in terminals supported by base16-shell scripts
-" User must set this variable in .vimrc
-"   let g:base16_shell_path=base16-builder/output/shell/
-" if !has('gui_running')
-"   if exists("g:base16_shell_path")
-"     execute "silent !/bin/sh ".g:base16_shell_path."/base16-material-dark.".&background.".sh"
-"   endif
-" endif
+" material-dark tweaks @bivers - based on base16
 
 " GUI color definitions
+" background
 let s:gui00 = "263238"
+" background
 let s:gui01 = "263238"
-let s:gui02 = "37474f"
+" blue-ish grey
+let s:gui02 = "465961"
+" grey
 let s:gui03 = "707880"
-let s:gui04 = "b5bd68"
-let s:gui05 = "8abeb7"
+" bright lime green - INSERT mode
+let s:gui04 = "c3e88d"
+" off-white - default white text
+let s:gui05 = "d6dbe4"
+" dark purple
 let s:gui06 = "00005f"
-let s:gui07 = "b294bb"
-let s:gui08 = "cc6666"
+" light purple
+let s:gui07 = "c18ee4"
+" bright salmon
+let s:gui08 = "f8516c"
+" salmon 
 let s:gui09 = "cc6666"
+" light orange
 let s:gui0A = "f0c674"
-let s:gui0B = "b5be63"
+" lime green
+let s:gui0B = "c3e88d"
+" teal
 let s:gui0C = "8abeb7"
-let s:gui0D = "81a2be"
-let s:gui0E = "ba8baf"
+" light blue - function names, NORMAL mode
+let s:gui0D = "82d1f1"
+" light purple
+let s:gui0E = "c18ee4" 
+" brown
 let s:gui0F = "a16946"
 
 " Terminal color definitions

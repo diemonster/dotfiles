@@ -81,7 +81,7 @@ let g:pymode_rope_completion = 1
 " ----------------------------------------------------------------------------
 " Color/Theme related 
 " ----------------------------------------------------------------------------
-" let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 " let g:hybrid_use_Xresources = 1
 let g:hybrid_use_iTerm_colors = 1
 " colorscheme hybrid_material
@@ -175,9 +175,9 @@ let g:airline#extensions#branch#enabled = 1
 " Macvim Config
 " ----------------------------------------------------------------------------
 if has("gui_running")
-  let g:hybrid_use_Xresources = 1
-  colorscheme hybrid_material
-  let g:airline_theme = "hybridline"
+  " let g:hybrid_use_Xresources = 1
+  colorscheme material-dark
+  " let g:airline_theme = "hybridline"
 endif
 " ----------------------------------------------------------------------------
 " Neomake Config

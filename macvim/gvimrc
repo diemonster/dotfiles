@@ -1,0 +1,7 @@
+set go-=L
+set guioptions-=L
+set guioptions-=r
+set guioptions-=R
+" set macligatures
+set guifont=Inconsolata\ for\ Powerline:h12
+set noantialias

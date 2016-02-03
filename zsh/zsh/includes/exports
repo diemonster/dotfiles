@@ -1,7 +1,8 @@
 #Exports
 
 # General
-export TERM="xterm-256color"
+# export TERM="xterm-256color"
+export TERM="screen-256color"
 if [[ `uname -s` == *CYGWIN* ]]; then
     export TERM="cygwin"
 fi
@@ -21,11 +22,6 @@ export LANG=en_US.UTF-8
 export EDITOR=vim
 export SVN_EDITOR=vim
 
-# Graphviz DOT stuff for Doxygen
-export DOT_PATH=/Applications/Graphviz.app/Contents/MacOS
-export HAVE_DOT=YES
-export SHORT_NAMES=YES
-
 # PATH (yes, it's messy)
 export PATH=/usr/local/bin:/usr/local/include:/usr/local/lib:/usr/bin:/usr/include:/usr/lib:/usr/texbin:/usr/local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/Users/bivers/bin:/Applications/Doxygen.app/Contents/Resources:/Applications/Doxygen.app/Contents/MacOS:/Applications/Graphviz.app/Contents/MacOS:/sbin:/Applications/Racket\ v5.3.3/bin
 
@@ -42,3 +38,7 @@ export GEM_HOME='/usr/local/Cellar/gems/1.9'
 
 # Env specific
 export xfra=/Users/bivers/Development/go/src/gitlab.imshealth.com/xfra
+export tools=/Users/bivers/Development/go/src/gitlab.imshealth.com/tools
+
+# powerline export
+export POWERLINE_CONFIG_COMMAND=/usr/local/bin/powerline-config

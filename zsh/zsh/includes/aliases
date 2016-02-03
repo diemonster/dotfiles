@@ -36,14 +36,5 @@ alias ag='ag --color-path "1;33"'
 # wtf
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 
-# sshuttle
-alias tunnel="sshuttle --dns -vvr xfra-vpn-2 -x 10.0.0.0/8 -x 162.0.0.0/8 -x 192.0.0.0/8 0/0"
-
-function dockerplz ()
-{
-sudo docker-machine ip dev > /dev/null
-if [[ $? == 1 ]]; then
-  sudo docker-machine start dev
-fi
-eval "$(sudo docker-machine env dev | grep -v \#)"
-}
+# docker-machine
+alias dmdev='eval "$(docker-machine env dev)"'

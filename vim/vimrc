@@ -1,13 +1,9 @@
-"
-" Very little of this will work outside of a Mac
-"
 let s:darwin = has('mac')
 call plug#begin('~/.vim/plugged')
 Plug 'fatih/vim-go'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'git@github.com:kien/rainbow_parentheses.vim.git'
 Plug 'git@github.com:scrooloose/syntastic.git'
-Plug 'git@github.com:Lokaltog/vim-easymotion.git'
 Plug 'git@github.com:wookiehangover/jshint.vim.git'
 Plug 'https://github.com/ConradIrwin/vim-bracketed-paste.git'
 Plug 'junegunn/fzf',        { 'do': 'yes \| ./install' }
@@ -28,15 +24,22 @@ Plug 'ekalinin/Dockerfile.vim'
 Plug 'fatih/molokai'
 Plug 'mhinz/vim-startify'
 Plug 'Valloric/YouCompleteMe'
-Plug 'kristijanhusak/vim-hybrid-material'
 Plug 'mbbill/undotree'
 Plug 'tpope/vim-commentary'
+Plug 'benekastah/neomake'
+Plug 'easymotion/vim-easymotion'
+Plug 'haya14busa/incsearch.vim'
+Plug 'kristijanhusak/vim-hybrid-material'
+Plug 'ryanoasis/vim-devicons'
 if s:darwin
   Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
-Plug 'bling/vim-airline'
 endif
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'chriskempson/base16-vim'
+Plug 'w0ng/vim-hybrid'
 call plug#end()
-
+"
 syntax on
 set encoding=utf-8
 set nocompatible
@@ -56,6 +59,14 @@ set title
 set lazyredraw
 set incsearch
 set showcmd
+set undofile " maintain undo history between sessions
+set undodir=~/.undodir/ " directory must exist 
+nnoremap Q <nop>
+" remove line numbers on unfocused window
+au WinLeave * set nonu
+au FocusLost * set nonu
+au WinEnter * set nu
+au FocusGained * set nu
 " jk remap to esc sequence
 inoremap jk <esc>
 filetype indent plugin on
@@ -67,18 +78,22 @@ let g:pymode_lint = 1
 let g:pymode_lint_on_fly = 0
 let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
 let g:pymode_rope_completion = 1
-" 
+" ----------------------------------------------------------------------------
+" Color/Theme related 
+" ----------------------------------------------------------------------------
+" let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+" let g:hybrid_use_Xresources = 1
+let g:hybrid_use_iTerm_colors = 1
+" colorscheme hybrid_material
+" colorscheme base16-ocean
 colorscheme material-dark
+" ----------------------------------------------------------------------------
+" Markdown Config
+" ----------------------------------------------------------------------------
 let g:vim_markdown_folding_disabled=1
-" disable Ex mode
-nnoremap Q <nop>
-" go customizations
-let g:go_fmt_fail_silently = 1
-let g:go_fmt_command = "gofmt"
-let g:enable_bold_font = 1
-" disabled due to weird characters on screen
-let g:go_auto_type_info = 0
-" F key mappings
+" ----------------------------------------------------------------------------
+" F Key Mappings
+" ----------------------------------------------------------------------------
 nmap <F1> :GoDescribe<CR>
 nmap <F3> :NERDTreeToggle<CR>
 nnoremap <F4> :UndotreeToggle<CR>
@@ -87,52 +102,36 @@ nmap <F6> :UndotreeToggle<CR>
 nnoremap <F11> :set spell spelllang=en_us<CR>
 nnoremap <F12> :set relativenumber!<CR>
 " ----------------------------------------------------------------------------
-" <F8> | Color scheme selector
-" ----------------------------------------------------------------------------
-function! s:rotate_colors()
-  if !exists('s:colors_list')
-    let s:colors_list =
-    \ sort(map(
-    \   filter(split(globpath(&rtp, "colors/*.vim"), "\n"), 'v:val !~ "^/usr/"'),
-    \   "substitute(fnamemodify(v:val, ':t'), '\\..\\{-}$', '', '')"))
-  endif
-  if !exists('s:colors_index')
-    let s:colors_index = index(s:colors_list, g:colors_name)
-  endif
-  let s:colors_index = (s:colors_index + 1) % len(s:colors_list)
-  let name = s:colors_list[s:colors_index]
-  execute 'colorscheme' name
-  redraw
-  echo name
-endfunction
-nnoremap <F8> :call <SID>rotate_colors()<cr>
-
-" ----------------------------------------------------------------------------
 " golang autodetect config
 " ----------------------------------------------------------------------------
 augroup filetypedetect_go
+    let g:go_fmt_fail_silently = 1
+    " let g:go_fmt_command = "gofmt"
+    let g:go_fmt_command = "gofmt"
+    let g:go_auto_type_info = 0
     let g:go_highlight_functions = 1
     let g:go_highlight_operators = 1
     let g:go_highlight_methods = 1
     let g:go_highlight_structs = 1
     let g:godef_same_file_in_same_window=1
     let g:go_highlight_extra_types = 1
+    let g:go_highlight_interfaces = 1
     let g:go_highlight_build_constraints = 1
-    let g:go_bin_path = "/Users/bivers/Development/go/bin"
     autocmd FileType go nmap gd <Plug>(go-def)
     autocmd FileType go nmap <Leader>t <Plug>(go-test)
-    
     autocmd FileType go nmap <Leader>i <Plug>(go-install)
-    
     autocmd FileType go nmap <leader>r <Plug>(go-run)
     autocmd FileType go nmap <leader>b <Plug>(go-build)
+    au FileType go nmap <Leader>e <Plug>(go-rename)
 augroup END
 " ----------------------------------------------------------------------------
 " syntastic config
 " ----------------------------------------------------------------------------
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_go_checkers = ['go', 'gofmt', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
 let g:syntastic_error_symbol = emoji#for('poop')
@@ -145,8 +144,8 @@ set completeopt-=preview
 " experimental mouse mode ;)
 " ----------------------------------------------------------------------------
 set mouse=a
-if has ("gui_macvim")
-    set ttymouse=xterm2
+if !has('nvim')
+  set ttymouse=xterm2
 endif
 " ----------------------------------------------------------------------------
 " vim-fugitive
@@ -170,7 +169,22 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#branch#enabled = 1
-
+" let g:airline_theme = "hybridline"
+" let g:airline_theme = "base16_ocean"
+" ----------------------------------------------------------------------------
+" Macvim Config
+" ----------------------------------------------------------------------------
+if has("gui_running")
+  let g:hybrid_use_Xresources = 1
+  colorscheme hybrid_material
+  let g:airline_theme = "hybridline"
+endif
+" ----------------------------------------------------------------------------
+" Neomake Config
+" ----------------------------------------------------------------------------
+let g:neomake_open_list = 3
+let g:neomake_javascript_enabled_makers = ['jshint']
+let g:neomake_go_enabled_makers = ['go']
 " ----------------------------------------------------------------------------
 " FZF
 " ----------------------------------------------------------------------------
@@ -178,11 +192,10 @@ if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
 
-nnoremap <silent> <Leader><Leader> :Files<CR>
+nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 nnoremap <silent> <Leader>C        :Colors<CR>
 nnoremap <silent> <Leader><Enter>  :Buffers<CR>
-nnoremap <silent> q: :History:<CR>
-nnoremap <silent> q/ :History/<CR>
+nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
 
 inoremap <expr> <c-x><c-t> fzf#complete('tmuxwords.rb --all-but-current --scroll 500 --min 5')
 imap <c-x><c-k> <plug>(fzf-complete-word)
@@ -190,22 +203,71 @@ imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
 " ----------------------------------------------------------------------------
 " ack.vim
 " ----------------------------------------------------------------------------
 if executable('ag')
-  let &grepprg = 'ag --nogroup --nocolor --column'
+let &grepprg = 'ag --nogroup --nocolor --column'
 else
-  let &grepprg = 'grep -rn $* *'
+let &grepprg = 'grep -rn $* *'
 endif
 command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
-
+" ----------------------------------------------------------------------------
+" hound.vim
+" ----------------------------------------------------------------------------
+let g:hound_base_url = "http://locahost"
+let g:hound_port = "6080"
+" ----------------------------------------------------------------------------
+" incsearch.vim
+" ----------------------------------------------------------------------------
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+" ----------------------------------------------------------------------------
+" easymotion.vim 
+" ----------------------------------------------------------------------------
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+let g:EasyMotion_startofline = 0
 " ----------------------------------------------------------------------------
 " YouCompleteMe
 " ----------------------------------------------------------------------------
 let g:ycm_autoclose_preview_window_after_completion = 0
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
+" ----------------------------------------------------------------------------
+" UndoTree.vim
+" ----------------------------------------------------------------------------
+let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_HighlightChangedText = 1
+" ----------------------------------------------------------------------------
+" Rainbow Parentheses
+" ----------------------------------------------------------------------------
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+au Syntax * RainbowParenthesesLoadBraces
 " ----------------------------------------------------------------------------
 " Startify
 " ----------------------------------------------------------------------------

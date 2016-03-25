@@ -3,9 +3,9 @@
 " GUI color definitions
 " background
 let s:gui00 = "263238"
-" background
-let s:gui01 = "263238"
-" blue-ish grey
+" blue grey (dark)
+let s:gui01 = "37474F"
+" blue grey (light)
 let s:gui02 = "465961"
 " grey
 let s:gui03 = "707880"
@@ -17,7 +17,7 @@ let s:gui05 = "d6dbe4"
 let s:gui06 = "00005f"
 " light purple
 let s:gui07 = "c18ee4"
-" bright salmon
+" accent salmon
 let s:gui08 = "f8516c"
 " salmon 
 let s:gui09 = "cc6666"

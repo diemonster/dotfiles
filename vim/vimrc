@@ -82,10 +82,7 @@ let g:pymode_rope_completion = 1
 " Color/Theme related 
 " ----------------------------------------------------------------------------
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-" let g:hybrid_use_Xresources = 1
 let g:hybrid_use_iTerm_colors = 1
-" colorscheme hybrid_material
-" colorscheme base16-ocean
 colorscheme material-dark
 " ----------------------------------------------------------------------------
 " Markdown Config
@@ -98,7 +95,8 @@ nmap <F1> :GoDescribe<CR>
 nmap <F3> :NERDTreeToggle<CR>
 nnoremap <F4> :UndotreeToggle<CR>
 nmap <F5> :TagbarToggle<CR>
-nmap <F6> :UndotreeToggle<CR>
+nmap <F6> :SyntasticToggleMode<CR>
+nmap <F7> :SyntasticCheck<CR>
 nnoremap <F11> :set spell spelllang=en_us<CR>
 nnoremap <F12> :set relativenumber!<CR>
 " ----------------------------------------------------------------------------
@@ -106,7 +104,6 @@ nnoremap <F12> :set relativenumber!<CR>
 " ----------------------------------------------------------------------------
 augroup filetypedetect_go
     let g:go_fmt_fail_silently = 1
-    " let g:go_fmt_command = "gofmt"
     let g:go_fmt_command = "gofmt"
     let g:go_auto_type_info = 0
     let g:go_highlight_functions = 1
@@ -119,7 +116,6 @@ augroup filetypedetect_go
     let g:go_highlight_build_constraints = 1
     autocmd FileType go nmap gd <Plug>(go-def)
     autocmd FileType go nmap <Leader>t <Plug>(go-test)
-    autocmd FileType go nmap <Leader>i <Plug>(go-install)
     autocmd FileType go nmap <leader>r <Plug>(go-run)
     autocmd FileType go nmap <leader>b <Plug>(go-build)
     au FileType go nmap <Leader>e <Plug>(go-rename)
@@ -182,7 +178,7 @@ endif
 " ----------------------------------------------------------------------------
 " Neomake Config
 " ----------------------------------------------------------------------------
-let g:neomake_open_list = 3
+let g:neomake_open_list = 2
 let g:neomake_javascript_enabled_makers = ['jshint']
 let g:neomake_go_enabled_makers = ['go']
 " ----------------------------------------------------------------------------
@@ -234,6 +230,7 @@ map <Leader>l <Plug>(easymotion-lineforward)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
+" map <Leader><Leader> <Plug>(easymotion-prefix)
 let g:EasyMotion_startofline = 0
 " ----------------------------------------------------------------------------
 " YouCompleteMe
@@ -268,6 +265,15 @@ let g:rbpt_colorpairs = [
     \ ['red',         'firebrick3'],
     \ ]
 au Syntax * RainbowParenthesesLoadBraces
+" ----------------------------------------------------------------------------
+" Autoread
+" ----------------------------------------------------------------------------
+" Save whenever switching windows or leaving vim. This is useful when running
+" the tests inside vim without having to save all files first.
+au FocusLost,WinLeave * :silent! wa
+
+" Trigger autoread when changing buffers or coming back to vim.
+au FocusGained,BufEnter * :silent! !
 " ----------------------------------------------------------------------------
 " Startify
 " ----------------------------------------------------------------------------

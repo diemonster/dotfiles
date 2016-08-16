@@ -1,0 +1,62 @@
+"*":
+  "activate-power-mode":
+    autoToggle: false
+  "atom-beautify":
+    _analyticsUserId: "18ac9aef-b656-4dc7-aeb0-49666038c293"
+    analytics: false
+  "atom-material-ui":
+    colors:
+      abaseColor:
+        red: 92
+        green: 107
+        blue: 192
+        alpha: 1
+      predefinedColor: "Indigo"
+    fonts:
+      fontSize: 14
+    tabs:
+      compactTabs: true
+    treeView:
+      compactList: true
+    ui:
+      animations: false
+  "autocomplete-go": {}
+  "autocomplete-plus":
+    confirmCompletion: "tab"
+    useCoreMovementCommands: false
+  core:
+    disabledPackages: [
+      "activate-power-mode"
+    ]
+    themes: [
+      "atom-material-ui"
+      "atom-material-syntax"
+    ]
+  editor:
+    fontFamily: "Fira Code"
+    invisibles: {}
+  "exception-reporting":
+    userId: "41740829-c9a0-64fe-109c-e6d1585f3252"
+  "file-icons": {}
+  "git-diff":
+    showIconsInEditorGutter: true
+  "git-plus":
+    gitPath: "/usr/local/bin/git"
+  "go-plus":
+    formatTool: "gofmt"
+    goPath: "/Users/bivers/Development/go"
+    lintOnSave: false
+    vetOnSave: false
+  linter:
+    errorPanelHeight: 127
+  "linter-shellcheck": {}
+  "markdown-preview": {}
+  "merge-conflicts": {}
+  pigments: {}
+  "vim-mode": {}
+  "vim-mode-plus":
+    highlightSearch: true
+    useClipboardAsDefaultRegister: true
+  "vim-surround": {}
+  welcome:
+    showOnStartup: false

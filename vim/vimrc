@@ -31,6 +31,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'haya14busa/incsearch.vim'
 Plug 'kristijanhusak/vim-hybrid-material'
 Plug 'ryanoasis/vim-devicons'
+Plug 'vim-scripts/bats.vim'
 if s:darwin
   Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
 endif
@@ -151,12 +152,10 @@ noremap <Leader>d :Gdiff<CR>
 " ----------------------------------------------------------------------------
 " Git Gutter emojis
 " ----------------------------------------------------------------------------
-silent! if emoji#available()
   let g:gitgutter_sign_added = emoji#for('small_blue_diamond')
   let g:gitgutter_sign_modified = emoji#for('small_orange_diamond')
   let g:gitgutter_sign_removed = emoji#for('small_red_triangle')
   let g:gitgutter_sign_modified_removed = emoji#for('collision')
-endif
 " ----------------------------------------------------------------------------
 " Airline Config
 " ----------------------------------------------------------------------------

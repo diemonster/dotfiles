@@ -31,8 +31,8 @@
 #   'j k': 'vim-mode-plus:reset-normal-mode'
 
 # INSERT MODE
-'atom-text-editor.vim-mode.insert-mode':
-  'j k': 'vim-mode:activate-normal-mode'
+'atom-text-editor.vim-mode-plus.insert-mode':
+  'j k': 'vim-mode-plus:activate-normal-mode'
 
 # GoTo Definition
 'atom-text-editor[data-grammar="source go"]:not(.mini)':
@@ -50,3 +50,8 @@
 # # Go-plus bindings
 # '.platform-darwin':
 #   'f2': 'golang:gobuild'
+
+# experimental ex mode
+'atom-text-editor.vim-mode-plus.normal-mode':
+  ':': 'vim-mode-plus-ex-mode:open'
+  '!': 'vim-mode-plus-ex-mode:toggle-setting'

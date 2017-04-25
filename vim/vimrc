@@ -10,11 +10,12 @@ Plug 'junegunn/fzf',        { 'do': 'yes \| ./install' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-emoji'
 Plug 'airblade/vim-gitgutter'
-Plug 'saltstack/salt-vim'
 Plug 'dgryski/vim-godef'
 Plug 'scrooloose/nerdtree'
 Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'flowtype/vim-flow'
 Plug 'plasticboy/vim-markdown'
 Plug 'marijnh/tern_for_vim'
 Plug 'tpope/vim-fugitive'
@@ -26,12 +27,13 @@ Plug 'mhinz/vim-startify'
 Plug 'Valloric/YouCompleteMe'
 Plug 'mbbill/undotree'
 Plug 'tpope/vim-commentary'
-Plug 'benekastah/neomake'
 Plug 'easymotion/vim-easymotion'
 Plug 'haya14busa/incsearch.vim'
 Plug 'kristijanhusak/vim-hybrid-material'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-scripts/bats.vim'
+Plug 'hashivim/vim-terraform'
+Plug 'hashivim/vim-consul'
 if s:darwin
   Plug 'zerowidth/vim-copy-as-rtf', { 'on': 'CopyRTF'          }
 endif
@@ -121,6 +123,7 @@ augroup filetypedetect_go
     autocmd FileType go nmap <leader>b <Plug>(go-build)
     au FileType go nmap <Leader>e <Plug>(go-rename)
 augroup END
+let $GOROOT="/usr/local/Cellar/go/1.7.3/libexec"
 " ----------------------------------------------------------------------------
 " syntastic config
 " ----------------------------------------------------------------------------
@@ -174,12 +177,6 @@ if has("gui_running")
   colorscheme material-dark
   " let g:airline_theme = "hybridline"
 endif
-" ----------------------------------------------------------------------------
-" Neomake Config
-" ----------------------------------------------------------------------------
-let g:neomake_open_list = 2
-let g:neomake_javascript_enabled_makers = ['jshint']
-let g:neomake_go_enabled_makers = ['go']
 " ----------------------------------------------------------------------------
 " FZF
 " ----------------------------------------------------------------------------
@@ -242,6 +239,11 @@ let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 " ----------------------------------------------------------------------------
 let g:undotree_SetFocusWhenToggle = 1
 let g:undotree_HighlightChangedText = 1
+" ----------------------------------------------------------------------------
+" vim jsx
+" ----------------------------------------------------------------------------
+let g:jsx_ext_required = 0
+let g:javascript_plugin_flow = 1
 " ----------------------------------------------------------------------------
 " Rainbow Parentheses
 " ----------------------------------------------------------------------------

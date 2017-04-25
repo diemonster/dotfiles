@@ -2,15 +2,13 @@
   "activate-power-mode":
     autoToggle: false
   "atom-beautify":
-    _analyticsUserId: "18ac9aef-b656-4dc7-aeb0-49666038c293"
-    analytics: false
+    general:
+      _analyticsUserId: "18ac9aef-b656-4dc7-aeb0-49666038c293"
+      analytics: false
   "atom-material-ui":
     colors:
-      abaseColor:
-        red: 92
-        green: 107
-        blue: 192
-        alpha: 1
+      abaseColor: "#5c6bc0"
+      genAccent: true
       predefinedColor: "Indigo"
     fonts:
       fontSize: 14
@@ -18,22 +16,28 @@
       compactTabs: true
     treeView:
       compactList: true
-    ui:
-      animations: false
-  "autocomplete-go": {}
+    ui: {}
+  "autocomplete-go":
+    suppressBuiltinAutocompleteProvider: false
   "autocomplete-plus":
     confirmCompletion: "tab"
     useCoreMovementCommands: false
   core:
     disabledPackages: [
       "activate-power-mode"
+      "go-debug"
+      "merge-conflicts"
     ]
+    projectHome: "/Users/bivers/Development"
+    telemetryConsent: "no"
     themes: [
       "atom-material-ui"
       "atom-material-syntax"
     ]
+    titleBar: "custom"
   editor:
     fontFamily: "Fira Code"
+    fontSize: 12
     invisibles: {}
   "exception-reporting":
     userId: "41740829-c9a0-64fe-109c-e6d1585f3252"
@@ -42,19 +46,40 @@
     showIconsInEditorGutter: true
   "git-plus":
     gitPath: "/usr/local/bin/git"
+  "go-debug":
+    panelInitialVisible: true
   "go-plus":
+    currentPanelHeight: "14.891179839633448vh"
+    disabledBundledPackages: [
+      "go-debug"
+    ]
     formatTool: "gofmt"
     goPath: "/Users/bivers/Development/go"
-    lintOnSave: false
+    lintOnSave: true
+    panelDisplayMode: "closed"
     vetOnSave: false
-  linter:
-    errorPanelHeight: 127
+  "gometalinter-linter":
+    args: [
+      "--disable-all"
+      "--json"
+    ]
+  "language-babel":
+    autoIndentJSX: true
+  linter: {}
   "linter-shellcheck": {}
+  "linter-ui-default": {}
   "markdown-preview": {}
   "merge-conflicts": {}
   pigments: {}
-  "vim-mode": {}
+  "terminal-plus":
+    toggles:
+      autoClose: true
+  "tree-view":
+    hideVcsIgnoredFiles: true
+  "vim-mode":
+    useClipboardAsDefaultRegister: true
   "vim-mode-plus":
+    clearMultipleCursorsOnEscapeInsertMode: true
     highlightSearch: true
     useClipboardAsDefaultRegister: true
   "vim-surround": {}
